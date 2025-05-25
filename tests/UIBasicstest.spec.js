@@ -1,19 +1,18 @@
-const {test} = require('@playwright/test');
-const { expect } = require('../playwright.config');
+const {test,expect} = require('@playwright/test');
+const { PageObject } = require('../POM/pageObject');
 
-test('Browser Context Playwright test',async ({browser})=> {
 
-   const context = await browser.newContext();
-   const page =  await context.newPage();
-   await page.goto("https://rahulshettyacademy.com/practice-project");
-    
-});
-
-test.only('Page Playwright test',async ({page})=> {
+test('Page Playwright test',async ({page})=> {
     
 //    const context = await browser.newContext();
 //    const page =  await context.newPage();
-   await page.goto("https://rahulshettyacademy.com/practice-project");
+    await page.goto("https://www.automationexercise.com/");
     console.log(await page.title()); // to get the title of the page
-    await expect(page).toHaveTitle("Improve Your Skill - Use our Practice Sites & Apps for your QA Automation | Rahul Shetty Academy");// to check the title of the page
+   
+   const pageObject = new PageObject(page);
+   await pageObject.userName.fill("Sai Sandeep");
+   await pageObject.email.fill("saisandeep6105@gmail.com");
+   await pageObject.agreeTerms.check();
+   await pageObject.formSubmit.click();
+   await page.waitForTimeout(2000);
 });

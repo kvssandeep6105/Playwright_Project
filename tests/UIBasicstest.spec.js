@@ -1,5 +1,5 @@
 const {test,expect} = require('@playwright/test');
-const { PageObject } = require('../POM/pageObject');
+//const { PageObject } = require('../POM/pageObject');
 
 
 test('Page Playwright test',async ({page})=> {
@@ -16,3 +16,4 @@ test('Page Playwright test',async ({page})=> {
    await pageObject.formSubmit.click();
    await page.waitForTimeout(2000);
 });
+//

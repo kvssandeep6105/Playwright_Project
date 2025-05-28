@@ -1,5 +1,5 @@
 module.exports = {
-  default: "npx cucumber-js features/Ecommerece.feature --tags '@login'  --exit",
+  default: "npx cucumber-js features/Ecommerece.feature --tags '@Signup'  --exit",
 
 }
 //npx cucumber-js features/ErrorValidation.feature --exit

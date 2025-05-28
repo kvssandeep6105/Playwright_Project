@@ -1,36 +1,38 @@
 const{Given, When, Then} = require('@cucumber/cucumber');
 const{ POMmanager } = require('../../POM/POMmanager');
 const playwright = require('@playwright/test');
+// const { expect } = require('../../playwright.config');
+const {test, expect} = require('@playwright/test');
 let pomManager 
 
 Given('I am on the signup page', { timeout: 100 * 1000 }, async function () {
 
    pomManager = new POMmanager(this.page);
-   this.login = await pomManager.getLoginPage();
-   await this.login.goTo();
-   await this.login.clickLoginButton();
+   this.signUp = await pomManager.getSignUpPage();
+   await this.signUp.goTo();
+   await this.signUp.clickLoginButton();
 
 });
 
 When('I enter a new {string} and {string}', { timeout: 100 * 1000 }, async function (username, Email) {
    pomManager = new POMmanager(this.page);
-   this.login = await pomManager.getLoginPage();
-   await this.login.enterSignupName(username);
-   await this.login.enterSignupEmail(Email);
-   await this.login.clickSignupButton();
+   this.signUp = await pomManager.getSignUpPage();
+   await this.signUp.enterSignupName(username);
+   await this.signUp.enterSignupEmail(Email);
+   await this.signUp.clickSignupButton();
 
 });
 When('I enter a invalid {string} and {string}', { timeout: 100 * 1000 }, async function (username, password) {
    pomManager = new POMmanager(this.page);
-   this.login = await pomManager.getLoginPage();
-   await this.login.enterUserName(username);
-   await this.login.enterPassword(password);
-   await this.login.clickSubmitButton();
+   this.signUp = await pomManager.getSignUpPage();
+   await this.signUp.enterUserName(username);
+   await this.signUp.enterPassword(password);
+   await this.signUp.clickSubmitButton();
 });
 Then('I should see an error message {string}', async function (errorMessage) {
    pomManager = new POMmanager(this.page);
-   this.login = await pomManager.getLoginPage();
-   const actualErrorMessage = await this.login.getErrorMessage();
+   this.signUp = await pomManager.getSignUpPage();
+   const actualErrorMessage = await this.signUp.getErrorMessage();
    if (actualErrorMessage.includes(errorMessage)) {
       console.log(`Error message is displayed as expected: ${actualErrorMessage}`);
    }
@@ -38,3 +40,40 @@ Then('I should see an error message {string}', async function (errorMessage) {
       throw new Error(`Expected error message "${errorMessage}" but got "${actualErrorMessage}"`);
    }
 });   
+
+
+Then('I should see the {string} page', async function (AccountInformation) {
+   pomManager = new POMmanager(this.page);
+   this.signUp = await pomManager.getSignUpPage();
+   const actualTitle = await this.signUp.getAccountInformationTitle();
+   expect(actualTitle.includes(AccountInformation)).toBeTruthy();
+   console.log(`Account information page is displayed as expected: ${actualTitle}`);
+});
+
+When('I Need to enter the account information',{ timeout: 100 * 1000 }, async function (dataTable) {
+   pomManager = new POMmanager(this.page);
+   this.signUp = await pomManager.getSignUpPage();
+   const data = dataTable.rowsHash();
+   await this.signUp.selectFemaleRadioButton();
+   await this.signUp.enterSignupPassword(data.password);
+   await this.signUp.selectDateOfBirth(data.day, data.month, data.year);
+   await this.signUp.enterFirstName(data.firstName);
+   await this.signUp.enterLastName(data.lastName);
+   await this.signUp.enterCompanyName(data.companyName);
+   await this.signUp.enterAddress1(data.address1);
+   await this.signUp.enterAddress2(data.address2);
+   await this.signUp.selectCountry(data.country);
+   await this.signUp.enterState(data.state);
+   await this.signUp.enterCity(data.city);
+   await this.signUp.enterZipCode(data.zipCode);
+   await this.signUp.enterMobileNumber(data.mobileNumber);
+   console.log("Account information entered successfully.");
+   // Add a delay to see the entered information before taking the screenshot
+   await this.signUp.clickCreateAccountButton();
+   console.log("Account information entered successfully.");
+   await this.page.waitForTimeout(5000); // Wait for 5 seconds to see the result
+   await this.page.screenshot({ path: 'screenshot.png', fullPage: true });
+   console.log("Screenshot taken and saved as screenshot.png");
+   await this.page.close(); // Close the page after taking the screenshot
+   console.log("Page closed after taking the screenshot");
+});         

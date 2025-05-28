@@ -1,14 +1,14 @@
-const{Login} = require('./Login');
+const{SignUp} = require('./SignUp');
 
 
 class POMmanager {
     constructor(page) {
       this.page = page;
-      this.login = new Login(this.page);
+      this.signUp = new SignUp(this.page);
     }
 
-    getLoginPage() {
-        return this.login;
+    getSignUpPage() {
+        return this.signUp;
     }
     
 }module.exports = { POMmanager };

@@ -36,3 +36,16 @@ Feature: E-commerce website login
     Examples:
       | username | Email                             | AccountInformation        |
       | SandeeP  | Saisandeepkunapureddy24@gmail.com | Enter Account Information |
+
+  @OrderCreation
+  Scenario Outline: Create an order with valid credentials
+    Given I am on the signup page
+    When I enter a valid "<username>" and "<password>"
+    And I add a product to the cart
+    Then I should see the product in my cart
+    When I proceed to checkout
+    Then I should see the order confirmation page
+
+    Examples:
+      | username                          | password     |
+      | Saisandeepkunapureddy09@gmail.com | SandeeP@6105 |

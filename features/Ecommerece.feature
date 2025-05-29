@@ -35,17 +35,28 @@ Feature: E-commerce website login
 
     Examples:
       | username | Email                             | AccountInformation        |
-      | SandeeP  | Saisandeepkunapureddy24@gmail.com | Enter Account Information |
+      | SandeeP  | Saisandeepkunapureddy25@gmail.com | Enter Account Information |
 
   @OrderCreation
   Scenario Outline: Create an order with valid credentials
     Given I am on the signup page
     When I enter a valid "<username>" and "<password>"
-    And I add a product to the cart
-    Then I should see the product in my cart
+    And I add a "<product>" to the cart
+    Then I should see the popup "<message>"
+    When I proceed to the cart
+    Then I should see the "<product>" in the cart
     When I proceed to checkout
-    Then I should see the order confirmation page
+    And I place the order
+    And I enter the payment details
+      | fieldName      | value               |
+      | cardNumber     |    4111111111111111 |
+      | cardHolderName | Sandeep Kunapureddy |
+      | expiryMonth    |                  12 |
+      | expiryYear     |                2025 |
+      | cvv            |                 123 |
+    And I confirm the order
+    Then I should see the order confirmation page "<confirmationmessage>"
 
     Examples:
-      | username                          | password     |
-      | Saisandeepkunapureddy09@gmail.com | SandeeP@6105 |
+      | username                          | password     | product                   | message                              | confirmationmessage |
+      | Saisandeepkunapureddy25@gmail.com | SandeeP@6105 | Grunt Blue Slim Fit Jeans | Your product has been added to cart. | Order Placed!       |

@@ -76,4 +76,89 @@ When('I Need to enter the account information',{ timeout: 100 * 1000 }, async fu
    console.log("Screenshot taken and saved as screenshot.png");
    await this.page.close(); // Close the page after taking the screenshot
    console.log("Page closed after taking the screenshot");
-});         
+});
+
+When('I enter a valid {string} and {string}', async function (username, password) {
+   pomManager = new POMmanager(this.page);
+   this.signUp = await pomManager.getSignUpPage();
+   await this.signUp.enterUserName(username);
+   await this.signUp.enterPassword(password);
+   await this.signUp.clickSubmitButton();
+});
+ 
+When('I add a {string} to the cart',{ timeout: 100 * 1000 },async function (product) {
+  pomManager = new POMmanager(this.page);
+   this.dashboardPage = await pomManager.getDashboardPage();
+   await this.dashboardPage.clickPlusIcon();
+   await this.dashboardPage.clickProductDomain();
+   await this.dashboardPage.searchProductAddCart(product);
+  
+   
+});   
+
+Then('I should see the popup {string}', async function (message) {
+   pomManager = new POMmanager(this.page);
+   this.dashboardPage = await pomManager.getDashboardPage();
+   const actualMessage = await this.dashboardPage.getConfirmationPopupText();
+   expect(actualMessage.includes(message)).toBeTruthy();
+   console.log(`Confirmation popup is displayed as expected: ${actualMessage}`);
+  
+
+
+});
+When('I proceed to the cart', async function () {
+   pomManager = new POMmanager(this.page);
+   this.dashboardPage = await pomManager.getDashboardPage();
+   return this.dashboardPage.clickCartButton();
+});
+
+Then('I should see the {string} in the cart',{ timeout: 100 * 1000 }, async function (product) {
+   pomManager = new POMmanager(this.page);
+   this.dashboardPage = await pomManager.getDashboardPage();
+   const cartDescription = await this.dashboardPage.getCartDescription();
+   expect(cartDescription.includes(product)).toBeTruthy();
+   console.log(`Product "${product}" is present in the cart: ${cartDescription}`);
+});
+
+When('I proceed to checkout', async function () {
+   pomManager = new POMmanager(this.page);
+   this.dashboardPage = await pomManager.getDashboardPage();
+   await this.dashboardPage.clickCheckoutButton();
+});
+
+
+When('I place the order',{ timeout: 100 * 1000 }, async function () {
+  
+   pomManager = new POMmanager(this.page);
+   this.dashboardPage = await pomManager.getDashboardPage();
+   await this.dashboardPage.clickPlaceOrderButton();
+});
+
+When('I enter the payment details',{ timeout: 100 * 1000 }, async function (dataTable) {
+   
+   pomManager = new POMmanager(this.page);
+   this.dashboardPage = await pomManager.getDashboardPage();
+   const data = dataTable.rowsHash();
+   await this.dashboardPage.enterNameOnCard(data.cardHolderName);
+   await this.dashboardPage.enterCardNumber(data.cardNumber);
+   await this.dashboardPage.enterCVC(data.cvv);
+   await this.dashboardPage.enterExpirationMonth(data.expiryMonth);
+   await this.dashboardPage.enterExpirationYear(data.expiryYear);
+
+});
+
+When('I confirm the order', async function () {
+  
+   pomManager = new POMmanager(this.page);
+   this.dashboardPage = await pomManager.getDashboardPage();
+   await this.dashboardPage.clickPayAndConfirmOrderButton();
+});
+
+
+Then('I should see the order confirmation page {string}',{ timeout: 100 * 1000 },async function (confirmationmessage) {
+   pomManager = new POMmanager(this.page);
+   this.dashboardPage = await pomManager.getDashboardPage();
+   const orderSuccessTitle = await this.dashboardPage.getOrderConfirmationMessage();
+   expect (orderSuccessTitle.includes(confirmationmessage)).toBeTruthy();
+   console.log(`Order confirmation message is displayed as expected: ${orderSuccessTitle}`);
+});

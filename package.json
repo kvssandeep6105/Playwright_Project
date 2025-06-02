@@ -12,6 +12,7 @@
   "devDependencies": {
     "@cucumber/cucumber": "^11.3.0",
     "@playwright/test": "^1.52.0",
+    "@testomatio/reporter": "^1.6.17",
     "@types/node": "^22.15.18",
     "allure-playwright": "^3.2.2",
     "playwright": "^1.52.0",
@@ -128,11 +129,7 @@
     "yaml": "^2.8.0",
     "yup": "^1.6.1"
   },
-  
   "optionalDependencies": {
     "fsevents": "^2.3.2"
   }
 }
-
-
-

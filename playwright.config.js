@@ -1,31 +1,29 @@
 // @ts-check
 const { devices } = require('@playwright/test');
 
+/**
+ * @type {import('@playwright/test').PlaywrightTestConfig}
+ */
 const config = {
-  testDir: './tests',
-  retries :0,
-  
-  /* Maximum time one test can run for. */
+  testDir: './features',
+  retries: 0,
+
   timeout: 30 * 1000,
   expect: {
-  
-    timeout: 5000
+    timeout: 5000,
   },
-  
-  reporter: 'html',
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+
+  reporter: [
+    ['list'],                // CLI output
+    ['allure-playwright'],   // Allure reporter
+  ],
+
   use: {
-
-    browserName : 'chromium',
-    headless : true,
-    screenshot : 'on',
-    trace : 'on',//off,on
-    
-    
-    
+    browserName: 'chromium',
+    headless: true,
+    screenshot: 'on',
+    trace: 'on',
   },
-
-
 };
 
 module.exports = config;

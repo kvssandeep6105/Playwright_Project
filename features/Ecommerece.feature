@@ -35,7 +35,7 @@ Feature: E-commerce website login
 
     Examples:
       | username | Email                             | AccountInformation        |
-      | SandeeP  | Saisandeepkunapureddy25@gmail.com | Enter Account Information |
+      | SandeeP  | Saisandeepkunapureddy25000@gmail.com | Enter Account Information |
 
   @OrderCreation
   Scenario Outline: Create an order with valid credentials

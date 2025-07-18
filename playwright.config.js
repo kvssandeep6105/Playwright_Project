@@ -5,7 +5,7 @@ const { devices } = require('@playwright/test');
  * @type {import('@playwright/test').PlaywrightTestConfig}
  */
 const config = {
-  testDir: './features',
+  testDir: 'tests',
   retries: 0,
 
   timeout: 30 * 1000,
@@ -20,9 +20,10 @@ const config = {
 
   use: {
     browserName: 'chromium',
-    headless: true,
+    headless: false,
     screenshot: 'on',
     trace: 'on',
+    viewport: { width: 1280, height: 720 },
   },
 };
 

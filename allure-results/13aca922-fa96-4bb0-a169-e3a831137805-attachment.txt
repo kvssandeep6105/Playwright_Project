@@ -1,0 +1,1 @@
+List of items: locator('.inventory_item')

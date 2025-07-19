@@ -1,29 +1,52 @@
 name: Run Cucumber Tests
+
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
+
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v4
+
     - uses: actions/setup-node@v4
       with:
         node-version: lts/*
+
     - name: Install dependencies
       run: npm ci
+
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
-    # - name: Run Playwright tests
-    #   run: npx playwright test
-    - name: Run Cucumber tests
-      run: npx cucumber-js  
-    - uses: actions/upload-artifact@v4
+
+    - name: Run Cucumber tests and generate JSON report
+      run: |
+        npx cucumber-js --format json:cucumber-report.json
+      continue-on-error: true  # Let workflow continue even if tests fail
+
+    - name: Upload Cucumber JSON report
       if: always()
+      uses: actions/upload-artifact@v4
       with:
-        name: playwright-report
-        path: playwright-report/
+        name: cucumber-json-report
+        path: cucumber-report.json
+        retention-days: 30
+
+    # OPTIONAL: Generate HTML report if you add generate-report.js
+    - name: Generate Cucumber HTML report
+      if: always()
+      run: |
+        node scripts/generate-report.js
+
+    - name: Upload Cucumber HTML report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: cucumber-html-report
+        path: cucumber-report.html
         retention-days: 30

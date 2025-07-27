@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@azure/microsoft-playwright-testing": "^1.0.0-beta.7",
     "@cucumber/cucumber": "^10.9.0",
     "@playwright/test": "^1.52.0",
     "@testomatio/reporter": "^1.6.17",

@@ -39,3 +39,45 @@ test('automation Test', async () => {
     await page.locator("#continue").click();
     await page.locator("#finish").click();
 });
+
+test('Automation print value from the tabele', async () => {
+    const browser = await playwright.chromium.launch();
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    await page.goto('https://www.nseindia.com/');
+    // Wait for the USD price element to be visible
+    await page.waitForTimeout(3000);
+    const usdLocator = page.locator('//tr//td//div[@class="curr_sign"]');
+    const count = await usdLocator.locator('td').count();
+    console.log(`Number of rows in the table: ${count}`);
+    for (let i = 0; i < count; i++) {
+        const rowText = await usdLocator.nth(i).textContent();
+        if (rowText.includes('USD')) {
+            console.log(`Row containing USD: ${rowText}`);
+            break;
+        }
+    }
+    await browser.close();
+    
+ 
+  });
+
+  
+
+test.only('Facebook login', async () => {
+  const browser = await require('@playwright/test').chromium.launch({ headless: false });
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  await page.goto('https://www.facebook.com/');
+
+  // Replace with your actual credentials
+  await page.locator('input[name="email"]').fill('YOUR_USERNAME');
+  await page.locator('input[name="pass"]').fill('YOUR_PASSWORD');
+  //await page.locator('button[name="login"]').click();
+
+  // Optionally, wait for navigation or a specific element after login
+  // await page.waitForNavigation();
+  // await expect(page).toHaveURL(/facebook.com/);
+
+  await browser.close();
+});

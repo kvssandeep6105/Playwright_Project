@@ -64,7 +64,7 @@ test('Automation print value from the tabele', async () => {
 
   
 
-test.only('Facebook login', async () => {
+test('Facebook login', async () => {
   const browser = await require('@playwright/test').chromium.launch({ headless: false });
   const context = await browser.newContext();
   const page = await context.newPage();
@@ -80,4 +80,25 @@ test.only('Facebook login', async () => {
   // await expect(page).toHaveURL(/facebook.com/);
 
   await browser.close();
+});
+
+test.only('IRCTC login', async () => {
+    const browser = await playwright.chromium.launch({ headless: false });
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    await page.goto('https://www.irctc.co.in/nget/train-search');
+
+    // Wait for the login button to be visible and click it
+    await page.locator('button[class="btn btn-primary"]').click();
+
+    // search for trains
+    await page.getByRole('searchbox').nth(0).fill('Singarayakonda');
+   // await page.pause(3000);
+   // await page.locator('//span[@class="ng-star-inserted"]').first().press('Enter');
+    await page.getByRole('searchbox').nth(0).press('Enter');
+    await page.getByRole('searchbox').nth(1).fill('Mumbai');
+    await page.getByRole('searchbox').nth(1).press('Enter');
+    await page.locator('//button[@label="Find Trains"]').click();
+   
+    await browser.close();//
 });

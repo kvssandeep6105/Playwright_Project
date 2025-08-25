@@ -1,13 +1,14 @@
 const playwright = require('@playwright/test');
 const {test, expect} = require('@playwright/test');
-
+const { chromium, webkit } = require('playwright');
 
 test('automation Test', async () => {
     const browser = await playwright.chromium.launch();
     const context = await browser.newContext();
     const page = await context.newPage();
     await page.goto('https://www.saucedemo.com/');
-    const data = await page.locator('//div[h4][1]');
+   // const data = await page.locator('//div[h4][1]');
+    const data = await page.getByTestId('login-credentials')
     console.log(await data.allTextContents());
     await page.locator("#user-name").fill("standard_user");
     await page.locator("#password").fill("secret_sauce");
@@ -82,7 +83,7 @@ test('Facebook login', async () => {
   await browser.close();
 });
 
-test.only('IRCTC login', async () => {
+test('IRCTC login', async () => {
     const browser = await playwright.chromium.launch({ headless: false });
     const context = await browser.newContext();
     const page = await context.newPage();
@@ -102,3 +103,40 @@ test.only('IRCTC login', async () => {
    
     await browser.close();//
 });
+
+test('Amazon data ',async () => {
+    const browser = await playwright.chromium.launch();
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    await page.goto('https://www.amazon.in/');
+   // await page.getByRole('input',{name:'searchbox'}).fill('Mobile');
+   await page.locator('//input[@id="twotabsearchtextbox"]').fill('Mobile');
+    await page.locator('#nav-search-submit-button').click();
+    await page.waitForTimeout(3000);
+    const items = await page.locator('//div[@class="puis-card-container s-card-container s-overflow-hidden aok-relative puis-include-content-margin puis puis-v2f1ac6sk7xfqs21ds5xhnowubz s-latency-cf-section puis-card-border"]');
+    const count = await items.count();
+    console.log(`Number of items: ${count}`);
+    console.log(`Items found: ${await items.allTextContents()}`);
+    //div[@class="puis-card-container s-card-container s-overflow-hidden aok-relative puis-include-content-margin puis puis-v2f1ac6sk7xfqs21ds5xhnowubz s-latency-cf-section puis-card-border"]
+});
+
+test.only('Flipkart data', async () => {
+    const browser = await playwright.chromium.launch();
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    await page.goto('https://www.flipkart.com/');
+    //await page.locator('button._2KpZ6l._2doB4z').click(); // Close the login popup
+    await page.getByPlaceholder('Search for products, brands and more').fill('Mobile');
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(3000);
+    const Mobile =  await page.locator('//div[normalize-space()="IQOO Z10X 5G (Ultramarine, 128 GB)"]')
+    const[newPage] = await 
+    Promise.all([
+        context.waitForEvent('page'),
+        Mobile.click()
+    ]);
+    await newPage.waitForLoadState('networkidle');
+
+  
+});
+

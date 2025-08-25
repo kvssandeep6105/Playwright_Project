@@ -19,7 +19,7 @@ const config = {
   ],
 
   use: {
-    browserName: 'chromium',
+    browserName: 'chromium', // Change to 'chromium' or 'firefox' as needed
     headless: false,
     screenshot: 'on',
     trace: 'on',

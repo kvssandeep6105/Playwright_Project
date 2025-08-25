@@ -37,11 +37,7 @@ jobs:
         path: cucumber-report.json
         retention-days: 30
 
-    # OPTIONAL: Generate HTML report if you add generate-report.js
-    - name: Generate Cucumber HTML report
-      if: always()
-      run: |
-        node scripts/generate-report.js
+   
 
     - name: Upload Cucumber HTML report
       if: always()
